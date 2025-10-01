@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Simples</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      display: flex;
+      min-height: 100vh;
+      background-color: #f5f7fa;
+      color: #333;
+    }
+    
+    /* Navbar lateral */
+    nav {
+      width: 240px;
+      background: linear-gradient(to bottom, #0abde3, #0796b0);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 0;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+      z-index: 100;
+    }
+    
+    .logo {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 0 20px;
+    }
+    
+    .logo h2 {
+      font-size: 1.5rem;
+      margin-bottom: 5px;
+    }
+    
+    .logo p {
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+    
+    nav ul {
+      list-style: none;
+      padding: 0;
+    }
+    
+    nav ul li {
+      margin: 5px 0;
+    }
+    
+    nav ul li a {
+      display: flex;
+      align-items: center;
+      color: white;
+      text-decoration: none;
+      padding: 12px 20px;
+      transition: all 0.3s;
+      border-left: 3px solid transparent;
+    }
+    
+    nav ul li a:hover, nav ul li a.active {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-left: 3px solid white;
+    }
+    
+    nav ul li a i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+    
+    /* Conteúdo principal */
+    main {
+      flex: 1;
+      padding: 25px;
+      overflow-y: auto;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .header h1 {
+      color: #333;
+      font-size: 1.8rem;
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .user-info img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #0abde3;
+    }
+    
+    /* Cards */
+    .cards {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+    
+    .card {
+      flex: 1 1 200px;
+      background-color: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+    }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(to right, #0abde3, #10ac84);
+    }
+    
+    .card h3 {
+      margin: 0 0 15px 0;
+      color: #555;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    
+    .card p {
+      font-size: 28px;
+      font-weight: bold;
+      margin: 0;
+      color: #0abde3;
+    }
+    
+    .card .icon {
+      font-size: 24px;
+      margin-bottom: 15px;
+      color: #0abde3;
+    }
+    
+    /* Gráfico e seções */
+    .dashboard-content {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 25px;
+    }
+    
+    .chart-container {
+      background-color: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    
+    .chart-container h3 {
+      margin-bottom: 20px;
+      color: #333;
+      font-size: 1.2rem;
+    }
+    
+    .side-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+    
+    .activity, .recent-users {
+      background-color: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    
+    .activity h3, .recent-users h3 {
+      margin-bottom: 20px;
+      color: #333;
+      font-size: 1.2rem;
+    }
+    
+    .activity-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+    
+    .activity-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      color: white;
+      font-size: 14px;
+    }
+    
+    .activity-info {
+      flex: 1;
+    }
+    
+    .activity-info p {
+      margin: 0;
+      font-size: 0.9rem;
+    }
+    
+    .activity-info span {
+      font-size: 0.8rem;
+      color: #888;
+    }
+    
+    .user-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .user-item:last-child {
+      border-bottom: none;
+    }
+    
+    .user-item img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 12px;
+    }
+    
+    .user-info p {
+      margin: 0;
+      font-weight: 500;
+    }
+    
+    .user-info span {
+      font-size: 0.8rem;
+      color: #888;
+    }
+    
+    /* Responsividade */
+    @media (max-width: 992px) {
+      .dashboard-content {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+      
+      nav {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 10px;
+      }
+      
+      .logo {
+        margin-bottom: 0;
+        margin-right: 20px;
+      }
+      
+      nav ul {
+        display: flex;
+      }
+      
+      nav ul li a {
+        border-left: none;
+        border-bottom: 3px solid transparent;
+        padding: 10px 15px;
+      }
+      
+      nav ul li a:hover, nav ul li a.active {
+        border-left: none;
+        border-bottom: 3px solid white;
+      }
+      
+      main {
+        padding: 15px;
+      }
+      
+      .cards {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">
+      <h2>Meu Dashboard</h2>
+      <p>Painel Administrativo</p>
+    </div>
+    
+    <ul>
+      <li><a href="#" class="active"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="file:///C:/Users/matheus.1935/Documents/GitHub/pasta_portf-lio/pasta_portf%C3%B3lio/dash/usuarios.html"><i class="fas fa-users"></i> Usuários</a></li>
+      <li><a href="#"><i class="fas fa-shopping-cart"></i> Vendas</a></li>
+      <li><a href="#"><i class="fas fa-chart-bar"></i> Relatórios</a></li>
+      <li><a href="#"><i class="fas fa-cog"></i> Configurações</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <div class="header">
+      <h1>Dashboard</h1>
+      <div class="user-info">
+        <div>
+          <p>João Silva</p>
+          <span>Administrador</span>
+        </div>
+        <img src="https://i.pravatar.cc/150?img=32" alt="Usuário">
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <h3>Usuários</h3>
+        <p>120</p>
+      </div>
+      <div class="card">
+        <div class="icon">
+          <i class="fas fa-shopping-cart"></i>
+        </div>
+        <h3>Vendas</h3>
+        <p>75</p>
+      </div>
+      <div class="card">
+        <div class="icon">
+          <i class="fas fa-dollar-sign"></i>
+        </div>
+        <h3>Receita</h3>
+        <p>R$ 9.500</p>
+      </div>
+      <div class="card">
+        <div class="icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h3>Crescimento</h3>
+        <p>12.5%</p>
+      </div>
+    </div>
+
+    <div class="dashboard-content">
+      <div class="chart-container">
+        <h3>Vendas Mensais</h3>
+        <canvas id="myChart" width="400" height="200"></canvas>
+      </div>
+      
+      <div class="side-panel">
+        <div class="activity">
+          <h3>Atividade Recente</h3>
+          <div class="activity-item">
+            <div class="activity-icon" style="background-color: #0abde3;">
+              <i class="fas fa-user-plus"></i>
+            </div>
+            <div class="activity-info">
+              <p>Novo usuário registrado</p>
+              <span>Há 5 minutos</span>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon" style="background-color: #10ac84;">
+              <i class="fas fa-shopping-cart"></i>
+            </div>
+            <div class="activity-info">
+              <p>Nova venda realizada</p>
+              <span>Há 15 minutos</span>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon" style="background-color: #ee5253;">
+              <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="activity-info">
+              <p>Problema no sistema resolvido</p>
+              <span>Há 1 hora</span>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon" style="background-color: #ff9f43;">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="activity-info">
+              <p>Relatório mensal gerado</p>
+              <span>Há 2 horas</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="recent-users">
+          <h3>Usuários Recentes</h3>
+          <div class="user-item">
+            <img src="https://i.pravatar.cc/150?img=1" alt="Usuário">
+            <div class="user-info">
+              <p>Maria Santos</p>
+              <span>Designer</span>
+            </div>
+          </div>
+          <div class="user-item">
+            <img src="https://i.pravatar.cc/150?img=5" alt="Usuário">
+            <div class="user-info">
+              <p>Pedro Oliveira</p>
+              <span>Desenvolvedor</span>
+            </div>
+          </div>
+          <div class="user-item">
+            <img src="https://i.pravatar.cc/150?img=8" alt="Usuário">
+            <div class="user-info">
+              <p>Ana Costa</p>
+              <span>Gerente</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho'],
+        datasets: [{
+          label: 'Vendas Mensais',
+          data: [12, 19, 8, 15, 10, 17],
+          backgroundColor: '#0abde3',
+          borderRadius: 5,
+          borderSkipped: false,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { 
+            display: false 
+          },
+          tooltip: {
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            titleFont: { size: 14 },
+            bodyFont: { size: 14 },
+            padding: 10,
+          }
+        },
+        scales: {
+          y: { 
+            beginAtZero: true,
+            grid: {
+              color: 'rgba(0, 0, 0, 0.05)'
+            }
+          },
+          x: {
+            grid: {
+              display: false
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
