@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portfólio — Projetos</title>
+  <meta name="description" content="Índice dos projetos do portfólio: Quiz Interativo, Dashboard, Agenda de Eventos, Mini Loja e Projeto IA." />
+  <!-- Tailwind CDN (rápido para protótipo) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+  <header class="bg-cyan-500 text-white">
+    <div class="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center font-bold">MB</div>
+        <div>
+          <h1 class="text-xl font-semibold">Portfólio Pessoal</h1>
+          <p class="text-sm opacity-90">Projetos selecionados — Aplicativos web e protótipos</p>
+        </div>
+      </div>
+      <nav class="hidden md:flex items-center gap-4">
+        <a href="#projetos" class="hover:underline">Projetos</a>
+        <a href="#sobre" class="hover:underline">Sobre</a>
+        <a href="#contato" class="hover:underline">Contato</a>
+      </nav>
+      <a href="#projetos" class="ml-auto md:ml-0 bg-white text-cyan-600 px-4 py-2 rounded-lg shadow">Ver projetos</a>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-12">
+    <section class="mb-10">
+      <div class="grid lg:grid-cols-2 gap-8 items-center">
+        <div>
+          <h2 class="text-3xl font-extrabold mb-3">Índice de Projetos</h2>
+          <p class="text-slate-600 mb-6">Selecione um projeto abaixo para ver a página index específica do projeto. Cada cartão tem uma descrição curta, tecnologias usadas e links de visualização/preview.</p>
+          <ul class="space-y-2 text-sm text-slate-600">
+            <li>• 01 — Portfólio Pessoal com IA (página principal deste portfólio)</li>
+            <li>• 02 — Aplicativo Web de Quiz Interativo</li>
+            <li>• 03 — Dashboard Simples com Dados Fictícios</li>
+            <li>• 04 — Agenda de Eventos / Festival Cultural</li>
+            <li>• 05 — Mini Loja Virtual (Fake Store)</li>
+          </ul>
+        </div>
+        <div class="bg-white rounded-2xl p-6 shadow flex flex-col gap-4">
+          <h3 class="font-semibold">Resumo rápido</h3>
+          <p class="text-sm text-slate-600">Este índice liga as versões "index" de cada projeto. Os links levam a páginas de preview locais ou rotas do projeto. Substitua os hrefs pelos caminhos reais ao publicar.</p>
+          <div class="flex gap-3 mt-2">
+            <a href="#projetos" class="px-4 py-2 bg-cyan-50 border border-cyan-200 rounded">Abrir projetos</a>
+            <a href="#contato" class="px-4 py-2 bg-slate-50 border rounded">Enviar feedback</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projetos" class="mb-16">
+      <h3 class="text-2xl font-bold mb-6">Projetos</h3>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Projeto 01: Portfólio/IA -->
+        <article class="bg-white rounded-xl shadow p-5 flex flex-col">
+          <div class="flex items-start justify-between gap-4">
+            <h4 class="font-semibold">01 — Portfólio Pessoal com IA</h4>
+            <span class="text-xs px-2 py-1 bg-sky-50 text-sky-700 rounded">Next.js / GPT</span>
+          </div>
+          <p class="text-sm text-slate-600 my-3">Página principal do portfólio, com integrações IA para gerar descrições, gerar imagens e ajudar visitantes a navegar pelos projetos.</p>
+          <div class="mt-auto flex items-center gap-3">
+            <a class="flex-1 text-center py-2 rounded bg-cyan-500 text-white" href="file:///C:/Users/matheus.1935/Documents/pasta_portf%C3%B3lio/portf%C3%B3lio/portf%C3%B3lio.html#">Abrir portfólio</a>
+            
+          </div>
+        </article>
+
+        <!-- Projeto 02: Quiz -->
+        <article class="bg-white rounded-xl shadow p-5 flex flex-col">
+          <div class="flex items-start justify-between gap-4">
+            <h4 class="font-semibold">02 — Quiz Interativo</h4>
+            <span class="text-xs px-2 py-1 bg-cyan-50 text-cyan-700 rounded">React / Node</span>
+          </div>
+          <p class="text-sm text-slate-600 my-3">Aplicativo de quiz com perguntas, temporizador, feedback e ranking. Ideal para aprender e avaliar conhecimentos.</p>
+          <div class="mt-auto flex items-center gap-3">
+            <a class="flex-1 text-center py-2 rounded bg-cyan-500 text-white" href="/projects/quiz/index.html">Abrir index</a>
+           
+          </div>
+        </article>
+
+        <!-- Projeto 03: Dashboard -->
+        <article class="bg-white rounded-xl shadow p-5 flex flex-col">
+          <div class="flex items-start justify-between gap-4">
+            <h4 class="font-semibold">03 — Dashboard Simples</h4>
+            <span class="text-xs px-2 py-1 bg-amber-50 text-amber-700 rounded">HTML / JS</span>
+          </div>
+          <p class="text-sm text-slate-600 my-3">Dashboard com gráficos e métricas fictícias — pronto para integrar com APIs reais ou gerar CSVs.</p>
+          <div class="mt-auto flex items-center gap-3">
+            <a class="flex-1 text-center py-2 rounded bg-cyan-500 text-white" href="/projects/dashboard/index.html">Abrir index</a>
+            
+        </article>
+
+        <!-- Projeto 04: Agenda de Eventos -->
+        <article class="bg-white rounded-xl shadow p-5 flex flex-col">
+          <div class="flex items-start justify-between gap-4">
+            <h4 class="font-semibold">04 — Agenda de Eventos / Festival</h4>
+            <span class="text-xs px-2 py-1 bg-green-50 text-green-700 rounded">Vue / Firebase</span>
+          </div>
+          <p class="text-sm text-slate-600 my-3">Agenda interativa para eventos com filtros por data, categorias e mapa de localização.</p>
+          <div class="mt-auto flex items-center gap-3">
+            <a class="flex-1 text-center py-2 rounded bg-cyan-500 text-white" href="/projects/agenda/index.html">Abrir index</a>
+            
+          </div>
+        </article>
+
+        <!-- Projeto 05: Mini Loja -->
+        <article class="bg-white rounded-xl shadow p-5 flex flex-col">
+          <div class="flex items-start justify-between gap-4">
+            <h4 class="font-semibold">05 — Mini Loja Virtual (Fake Store)</h4>
+            <span class="text-xs px-2 py-1 bg-purple-50 text-purple-700 rounded">E‑commerce</span>
+          </div>
+          <p class="text-sm text-slate-600 my-3">Loja fake com catálogo, carrinho e checkout simulado — perfeito para testar integração de pagamentos em ambiente de desenvolvimento.</p>
+          <div class="mt-auto flex items-center gap-3">
+            <a class="flex-1 text-center py-2 rounded bg-cyan-500 text-white" href="/projects/store/index.html">Abrir index</a>
+            
+          </div>
+        </article>
+      </div>
+    </section>
+
+    
+</body>
+</html>
