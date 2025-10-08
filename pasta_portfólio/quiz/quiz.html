@@ -1,455 +1,772 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quizzes Interativos</title>
-<style>
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  
-  body { 
-    font-family: 'Segoe UI', Arial, sans-serif; 
-    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-  }
-  
-  .quiz-container { 
-    background: #fff; 
-    padding: 30px; 
-    border-radius: 16px; 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
-    width: 100%;
-    max-width: 600px;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .quiz-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 5px;
-    background: linear-gradient(90deg, #ff9a9e 0%, #fad0c4 100%);
-  }
-  
-  h2 { 
-    color: #333; 
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 1.8rem;
-  }
-  
-  .progress-bar {
-    height: 6px;
-    background: #e0e0e0;
-    border-radius: 3px;
-    margin-bottom: 25px;
-    overflow: hidden;
-  }
-  
-  .progress {
-    height: 100%;
-    background: linear-gradient(90deg, #ff9a9e 0%, #fad0c4 100%);
-    width: 0%;
-    transition: width 0.3s ease;
-  }
-  
-  .question { 
-    margin-bottom: 20px; 
-    font-weight: bold;
-    font-size: 1.2rem;
-    line-height: 1.4;
-  }
-  
-  .options button { 
-    display: block; 
-    margin: 10px 0; 
-    padding: 12px; 
-    width: 100%; 
-    border: none; 
-    border-radius: 8px; 
-    cursor: pointer; 
-    background: #0abde3; 
-    color: white; 
-    font-size: 16px; 
-    transition: all 0.3s; 
-    text-align: left;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .options button:hover { 
-    background: #0796b0; 
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  }
-  
-  .options button:disabled {
-    cursor: not-allowed;
-    opacity: 0.7;
-  }
-  
-  .options button.correct {
-    background: #2ecc71;
-  }
-  
-  .options button.incorrect {
-    background: #e74c3c;
-  }
-  
-  .feedback { 
-    margin-top: 15px; 
-    font-weight: bold;
-    padding: 12px;
-    border-radius: 8px;
-    text-align: center;
-    animation: fadeIn 0.5s;
-  }
-  
-  .feedback.correct {
-    background: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-  }
-  
-  .feedback.incorrect {
-    background: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-  }
-  
-  .next-btn { 
-    margin-top: 20px; 
-    padding: 12px 24px; 
-    background: #10ac84; 
-    color: white; 
-    border: none; 
-    border-radius: 8px; 
-    cursor: pointer; 
-    display: none;
-    font-size: 16px;
-    font-weight: bold;
-    transition: all 0.3s;
-    width: 100%;
-  }
-  
-  .next-btn:hover { 
-    background: #0e9c6e; 
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  }
-  
-  .menu button { 
-    margin: 8px 0; 
-    padding: 14px 20px; 
-    background: #576574; 
-    color: white; 
-    border: none; 
-    border-radius: 8px; 
-    cursor: pointer; 
-    width: 100%;
-    font-size: 16px;
-    transition: all 0.3s;
-  }
-  
-  .menu button:hover { 
-    background: #222f3e; 
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  }
-  
-  .result-container { 
-    text-align: center;
-  }
-  
-  .score-display {
-    font-size: 1.5rem;
-    margin: 20px 0;
-    padding: 20px;
-    border-radius: 12px;
-    background: #f8f9fa;
-  }
-  
-  .score-percentage {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin: 10px 0;
-    color: #2e86de;
-  }
-  
-  .restart-btn {
-    margin-top: 20px;
-    padding: 12px 24px;
-    background: #2e86de;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    transition: all 0.3s;
-    width: 100%;
-  }
-  
-  .restart-btn:hover {
-    background: #1b6ec2;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  }
-  
-  .category-title {
-    color: #576574;
-    font-size: 1.1rem;
-    margin-bottom: 10px;
-    text-align: center;
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  
-  @media (max-width: 600px) {
-    .quiz-container {
-      padding: 20px;
-    }
-    
-    h2 {
-      font-size: 1.5rem;
-    }
-    
-    .question {
-      font-size: 1.1rem;
-    }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz IA - Perguntas Geradas por Inteligência Artificial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --error: #ef4444;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --bg: #ffffff;
+            --bg-alt: #f8fafc;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --error: #ef4444;
+            --text: #f1f5f9;
+            --text-light: #cbd5e1;
+            --bg: #0f172a;
+            --bg-alt: #1e293b;
+            --card-bg: #1e293b;
+            --border: #334155;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            transition: var(--transition);
+            border: 1px solid var(--border);
+        }
+
+        .card-header {
+            padding: 20px;
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--secondary) 100%);
+        }
+
+        .card-body {
+            padding: 30px;
+        }
+
+        h1, h2, h3 {
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        p {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            font-weight: 500;
+            text-decoration: none;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(37, 99, 235, 0.1);
+        }
+
+        .btn-lg {
+            padding: 14px 28px;
+            font-size: 1.1rem;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mb-4 {
+            margin-bottom: 1.5rem;
+        }
+
+        .mb-6 {
+            margin-bottom: 2.5rem;
+        }
+
+        .mt-6 {
+            margin-top: 2.5rem;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .flex-col {
+            flex-direction: column;
+        }
+
+        .gap-3 {
+            gap: 1rem;
+        }
+
+        .gap-4 {
+            gap: 1.5rem;
+        }
+
+        .ai-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--accent);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--border);
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        .question {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+            line-height: 1.4;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .option-btn {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 1rem;
+            font-weight: 500;
+            text-align: left;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        .option-btn.correct {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .option-btn.incorrect {
+            background: var(--error);
+            border-color: var(--error);
+            color: white;
+        }
+
+        .feedback {
+            margin-top: 1rem;
+            padding: 16px;
+            border-radius: var(--radius);
+            text-align: center;
+            font-weight: 500;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback.correct {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .feedback.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .score-display {
+            padding: 2rem;
+            border-radius: var(--radius);
+            background: var(--bg-alt);
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .score-percentage {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 1rem 0;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(37, 99, 235, 0.2);
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .emoji-btn {
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .card-body {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            h2 {
+                font-size: 1.3rem;
+            }
+            
+            .question {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-
-<div class="quiz-container">
-  <h2>Quizzes Interativos</h2>
-  
-  <div class="menu" id="menu">
-    <p class="category-title">Escolha o tema do quiz:</p>
-    <button onclick="startQuiz('filmes')">🎬 Filmes</button>
-    <button onclick="startQuiz('educacao')">📚 Educação</button>
-    <button onclick="startQuiz('ficcao')">🧙‍♂️ Ficção</button>
-    <button onclick="startQuiz('jogos')">🎮 Jogos</button>
-  </div>
-  
-  <div class="question-container" id="question-container" style="display:none;">
-    <div class="progress-bar">
-      <div class="progress" id="progress"></div>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1>Quiz IA - Perguntas Geradas por Inteligência Artificial</h1>
+                <p>Teste seus conhecimentos com perguntas geradas por IA</p>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+            
+            <div class="card-body">
+                <div class="menu" id="menu">
+                    <div class="ai-badge">
+                        <i class="fas fa-robot"></i>
+                        IA Generativa
+                    </div>
+                    <h2 class="text-center mb-6">Escolha o tema do quiz:</h2>
+                    <div class="flex flex-col gap-3">
+                        <button class="btn btn-primary btn-lg emoji-btn" onclick="startQuiz('tecnologia')">
+                            <i class="fas fa-laptop-code"></i>
+                            Tecnologia
+                        </button>
+                        <button class="btn btn-primary btn-lg emoji-btn" onclick="startQuiz('ciencia')">
+                            <i class="fas fa-flask"></i>
+                            Ciência
+                        </button>
+                        <button class="btn btn-primary btn-lg emoji-btn" onclick="startQuiz('cultura')">
+                            <i class="fas fa-globe-americas"></i>
+                            Cultura Geral
+                        </button>
+                        <button class="btn btn-primary btn-lg emoji-btn" onclick="startQuiz('historia')">
+                            <i class="fas fa-landmark"></i>
+                            História
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="question-container" id="question-container" style="display:none;">
+                    <div class="ai-badge">
+                        <i class="fas fa-robot"></i>
+                        Pergunta gerada por IA
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" id="progress"></div>
+                    </div>
+                    <div class="question" id="question"></div>
+                    <div class="options" id="options"></div>
+                    <div class="feedback" id="feedback"></div>
+                    <button class="btn btn-secondary btn-lg mt-6" id="next-btn" style="display:none; width: 100%;">
+                        Próxima Pergunta
+                    </button>
+                </div>
+                
+                <div class="loading" id="loading" style="display:none;">
+                    <div class="spinner"></div>
+                    <h3>Gerando perguntas com IA...</h3>
+                    <p>Isso pode levar alguns segundos</p>
+                </div>
+                
+                <div class="result-container text-center" id="result-container" style="display:none;">
+                    <div class="ai-badge">
+                        <i class="fas fa-robot"></i>
+                        Análise de Resultados por IA
+                    </div>
+                    <h2 class="mb-4">Resultado Final</h2>
+                    <div class="score-display">
+                        <p id="score" class="mb-4"></p>
+                        <div class="score-percentage" id="score-percentage"></div>
+                        <p id="ai-feedback"></p>
+                    </div>
+                    <button class="btn btn-primary btn-lg" onclick="showMenu()">Voltar ao Menu</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="question" id="question"></div>
-    <div class="options" id="options"></div>
-    <div class="feedback" id="feedback"></div>
-    <button class="next-btn" id="next-btn">Próxima Pergunta</button>
-  </div>
-  
-  <div class="result-container" id="result-container" style="display:none;">
-    <h2>Resultado Final</h2>
-    <div class="score-display">
-      <p id="score"></p>
-      <div class="score-percentage" id="score-percentage"></div>
-    </div>
-    <button class="restart-btn" onclick="showMenu()">Voltar ao Menu</button>
-  </div>
-</div>
 
-<script>
-const quizzes = {
-  filmes: [
-    {question:"Qual filme ganhou o Oscar de Melhor Filme em 2023?", options:["Top Gun: Maverick","Everything Everywhere All at Once","Avatar: O Caminho da Água","The Fabelmans"], answer:1, feedback:"“Everything Everywhere All at Once” ganhou o Oscar de Melhor Filme em 2023."},
-    {question:"Verdadeiro ou falso: O filme “Titanic” foi dirigido por Steven Spielberg.", options:["Verdadeiro","Falso"], answer:1, feedback:"Foi dirigido por James Cameron."},
-    {question:"Em “O Senhor dos Anéis”, qual é o nome do hobbit que carrega o anel?", options:["Frodo","Sam","Bilbo","Peregrin"], answer:0, feedback:"Frodo Bolseiro é o portador do Um Anel."},
-    {question:"Qual destes filmes é de ficção científica?", options:["O Poderoso Chefão","Star Wars","Forrest Gump","A Lista de Schindler"], answer:1, feedback:"Star Wars é um clássico da ficção científica."},
-    {question:"Verdadeiro ou falso: “Matrix” foi lançado em 1999.", options:["Verdadeiro","Falso"], answer:0, feedback:"Correto! Matrix foi lançado em 1999."},
-    // Novas perguntas
-    {question:"Qual ator interpretou o Coringa no filme de 2019?", options:["Heath Ledger","Joaquin Phoenix","Jared Leto","Jack Nicholson"], answer:1, feedback:"Joaquin Phoenix interpretou o Coringa no filme de 2019."},
-    {question:"Em que ano foi lançado o primeiro filme da saga Star Wars?", options:["1975","1977","1980","1983"], answer:1, feedback:"Star Wars: Episódio IV - Uma Nova Esperança foi lançado em 1977."},
-    {question:"Qual destes filmes é dirigido por Christopher Nolan?", options:["Interestelar","Pulp Fiction","O Irlandês","Parasita"], answer:0, feedback:"Interestelar foi dirigido por Christopher Nolan."},
-    {question:"Qual filme ganhou o primeiro Oscar de Melhor Animação em 2002?", options:["Shrek","Procurando Nemo","A Viagem de Chihiro","Toy Story"], answer:0, feedback:"Shrek foi o primeiro vencedor do Oscar de Melhor Animação em 2002."},
-    {question:"Quem dirigiu o filme 'Cidadão Kane'?", options:["Alfred Hitchcock","Orson Welles","Charlie Chaplin","John Ford"], answer:1, feedback:"Orson Welles dirigiu e estrelou 'Cidadão Kane'."},
-    {question:"Qual atriz interpretou Hermione Granger nos filmes de Harry Potter?", options:["Emma Watson","Emma Stone","Keira Knightley","Natalie Portman"], answer:0, feedback:"Emma Watson interpretou Hermione Granger."},
-    {question:"Qual é o filme de maior bilheteria de todos os tempos (não ajustado pela inflação)?", options:["Avatar","Vingadores: Ultimato","Titanic","Star Wars: O Despertar da Força"], answer:1, feedback:"Vingadores: Ultimato é o filme de maior bilheteria."},
-    {question:"Em que filme aparece a frase 'I'll be back'?", options:["Rambo","O Exterminador do Futuro","Duro de Matar","Matrix"], answer:1, feedback:"A frase 'I'll be back' é dita por Arnold Schwarzenegger em O Exterminador do Futuro."},
-    {question:"Qual destes filmes NÃO faz parte da trilogia O Senhor dos Anéis?", options:["A Sociedade do Anel","As Duas Torres","O Retorno do Rei","O Hobbit"], answer:3, feedback:"O Hobbit é uma prequela da trilogia O Senhor dos Anéis."},
-    {question:"Quem interpretou Tony Stark/Iron Man no Universo Cinematográfico Marvel?", options:["Chris Evans","Robert Downey Jr.","Chris Hemsworth","Mark Ruffalo"], answer:1, feedback:"Robert Downey Jr. interpretou Tony Stark/Iron Man."}
-  ],
-  
-  educacao: [
-    {question:"Verdadeiro ou falso: A água ferve a 100°C no nível do mar.", options:["Verdadeiro","Falso"], answer:0, feedback:"Correto! A água ferve a 100°C ao nível do mar."},
-    {question:"Qual é a capital do Brasil?", options:["Rio de Janeiro","São Paulo","Brasília","Belo Horizonte"], answer:2, feedback:"Brasília é a capital do Brasil."},
-    {question:"Quem descobriu a América em 1492?", options:["Cristóvão Colombo","Vasco da Gama","Fernão de Magalhães","Pedro Álvares Cabral"], answer:0, feedback:"Cristóvão Colombo chegou à América em 1492."},
-    {question:"Qual é a fórmula da água?", options:["CO2","H2O","O2","NaCl"], answer:1, feedback:"H2O é a fórmula da água."},
-    {question:"Verdadeiro ou falso: A fotossíntese ocorre nas folhas das plantas.", options:["Verdadeiro","Falso"], answer:0, feedback:"Correto! A fotossíntese ocorre principalmente nas folhas."},
-    // Novas perguntas
-    {question:"Quantos planetas existem no nosso sistema solar?", options:["7","8","9","10"], answer:1, feedback:"Existem 8 planetas no nosso sistema solar: Mercúrio, Vênus, Terra, Marte, Júpiter, Saturno, Urano e Netuno."},
-    {question:"Qual é o maior oceano da Terra?", options:["Atlântico","Índico","Ártico","Pacífico"], answer:3, feedback:"O Oceano Pacífico é o maior oceano da Terra."},
-    {question:"Quem escreveu 'Dom Quixote'?", options:["Miguel de Cervantes","William Shakespeare","Gabriel García Márquez","Jorge Luis Borges"], answer:0, feedback:"Miguel de Cervantes escreveu 'Dom Quixote'."},
-    {question:"Qual é o elemento químico mais abundante no universo?", options:["Oxigênio","Carbono","Hidrogênio","Hélio"], answer:2, feedback:"O hidrogênio é o elemento mais abundante no universo."},
-    {question:"Quantos lados tem um heptágono?", options:["5","6","7","8"], answer:2, feedback:"Um heptágono tem 7 lados."},
-    {question:"Qual é a capital da Austrália?", options:["Sydney","Melbourne","Canberra","Perth"], answer:2, feedback:"Canberra é a capital da Austrália."},
-    {question:"Quem pintou a 'Mona Lisa'?", options:["Vincent van Gogh","Pablo Picasso","Leonardo da Vinci","Michelangelo"], answer:2, feedback:"Leonardo da Vinci pintou a 'Mona Lisa'."},
-    {question:"Qual é o maior deserto do mundo?", options:["Deserto do Saara","Deserto da Arábia","Deserto de Gobi","Antártida"], answer:3, feedback:"A Antártida é considerada o maior deserto do mundo."},
-    {question:"Quantos ossos tem o corpo humano adulto?", options:["196","206","216","226"], answer:1, feedback:"O corpo humano adulto tem 206 ossos."},
-    {question:"Qual é o rio mais longo do mundo?", options:["Rio Nilo","Rio Amazonas","Rio Yangtzé","Rio Mississippi"], answer:0, feedback:"O Rio Nilo é considerado o rio mais longo do mundo."}
-  ],
-  
-  ficcao: [
-    {question:"Quem é o autor de “Harry Potter”?", options:["J.R.R. Tolkien","J.K. Rowling","George R.R. Martin","Suzanne Collins"], answer:1, feedback:"J.K. Rowling é a autora de Harry Potter."},
-    {question:"Verdadeiro ou falso: Sherlock Holmes é um personagem de ficção.", options:["Verdadeiro","Falso"], answer:0, feedback:"Correto! Sherlock Holmes é um personagem fictício criado por Arthur Conan Doyle."},
-    {question:"Em “O Senhor dos Anéis”, quem é o portador do anel?", options:["Gandalf","Frodo","Aragorn","Legolas"], answer:1, feedback:"Frodo é o portador do Um Anel."},
-    {question:"Qual série se passa em Westeros?", options:["Harry Potter","Game of Thrones","The Hunger Games","Shadowhunters"], answer:1, feedback:"Game of Thrones se passa em Westeros."},
-    {question:"Verdadeiro ou falso: Gandalf é conhecido como “O Cinzento”.", options:["Verdadeiro","Falso"], answer:0, feedback:"Correto! Gandalf é chamado de 'O Cinzento'."},
-    // Novas perguntas
-    {question:"Qual é o verdadeiro nome de Superman?", options:["Bruce Wayne","Clark Kent","Kal-El","Peter Parker"], answer:2, feedback:"O verdadeiro nome de Superman é Kal-El."},
-    {question:"Em '1984' de George Orwell, qual é o lema do Partido?", options:["Guerra é Paz","Liberdade é Escravidão","Ignorância é Força","Todas as alternativas"], answer:3, feedback:"O lema do Partido é: Guerra é Paz, Liberdade é Escravidão, Ignorância é Força."},
-    {question:"Qual destes NÃO é um hobbit em O Senhor dos Anéis?", options:["Frodo","Sam","Merry","Gimli"], answer:3, feedback:"Gimli é um anão, não um hobbit."},
-    {question:"Em que planeta se passa a série 'Duna'?", options:["Tatooine","Arrakis","Pandora","Krypton"], answer:1, feedback:"Duna se passa no planeta desértico Arrakis."},
-    {question:"Qual é o nome do dragão de Daenerys Targaryen em Game of Thrones?", options:["Smaug","Drogon","Viserion","Rhaegal"], answer:1, feedback:"Drogon é o dragão principal de Daenerys."},
-    {question:"Quem escreveu 'Fundação'?", options:["Isaac Asimov","Arthur C. Clarke","Philip K. Dick","Frank Herbert"], answer:0, feedback:"Isaac Asimov escreveu a série Fundação."},
-    {question:"Qual destes é um personagem de 'O Guia do Mochileiro das Galáxias'?", options:["Zaphod Beeblebrox","Han Solo","Jean-Luc Picard","Malcolm Reynolds"], answer:0, feedback:"Zaphod Beeblebrox é um personagem de O Guia do Mochileiro das Galáxias."},
-    {question:"Em 'Admirável Mundo Novo', como é chamada a droga que todos usam?", options:["Soma","Prosac","Valium","Morfina"], answer:0, feedback:"A droga no livro é chamada de Soma."},
-    {question:"Qual é o nome do vilão em 'O Senhor dos Anéis'?", options:["Saruman","Sauron","Gollum","Balrog"], answer:1, feedback:"Sauron é o principal vilão em O Senhor dos Anéis."},
-    {question:"Em que ano se passa o romance '1984' de George Orwell?", options:["1948","1984","2020","O ano não é especificado"], answer:1, feedback:"O romance se passa em 1984, embora tenha sido escrito em 1949."}
-  ],
-  
-  jogos: [
-    {question:"Qual é o mascote da Nintendo?", options:["Sonic","Mario","Pikachu","Kirby"], answer:1, feedback:"Mario é o mascote da Nintendo."},
-    {question:"Verdadeiro ou falso: “Minecraft” é um jogo de construção e sobrevivência.", options:["Verdadeiro","Falso"], answer:0, feedback:"Correto! Minecraft é um jogo de construção e sobrevivência."},
-    {question:"Qual jogo popular apresenta a ilha de “Battle Royale”?", options:["Fortnite","League of Legends","The Sims","Call of Duty"], answer:0, feedback:"Fortnite é famoso pelo modo Battle Royale."},
-    {question:"Quem é o personagem principal de “The Legend of Zelda”?", options:["Link","Zelda","Ganondorf","Mario"], answer:0, feedback:"Link é o personagem principal da série."},
-    {question:"Verdadeiro ou falso: “Among Us” é um jogo de dedução social.", options:["Verdadeiro","Falso"], answer:0, feedback:"Correto! Among Us é um jogo de dedução social."},
-    // Novas perguntas
-    {question:"Qual empresa desenvolveu o jogo 'The Last of Us'?", options:["Naughty Dog","Rockstar Games","Ubisoft","Bethesda"], answer:0, feedback:"Naughty Dog desenvolveu The Last of Us."},
-    {question:"Em que ano foi lançado o primeiro 'Super Mario Bros.'?", options:["1983","1985","1987","1990"], answer:1, feedback:"O primeiro Super Mario Bros. foi lançado em 1985."},
-    {question:"Qual destes NÃO é um tipo de Pokémon?", options:["Fogo","Água","Planta","Metal"], answer:3, feedback:"Não existe tipo Metal em Pokémon, existe tipo Aço."},
-    {question:"Qual é o nome do criador de Minecraft?", options:["Markus Persson","Gabe Newell","Hideo Kojima","Shigeru Miyamoto"], answer:0, feedback:"Markus Persson, conhecido como 'Notch', criou Minecraft."},
-    {question:"Qual destes jogos é um RPG (Role-Playing Game)?", options:["The Witcher 3: Wild Hunt","Call of Duty","FIFA","Tetris"], answer:0, feedback:"The Witcher 3 é um RPG."},
-    {question:"Qual console foi lançado pela Sony em 1994?", options:["PlayStation","PlayStation 2","Nintendo 64","Sega Saturn"], answer:0, feedback:"O primeiro PlayStation foi lançado em 1994."},
-    {question:"Qual é o jogo mais vendido de todos os tempos?", options:["Tetris","Minecraft","Grand Theft Auto V","Wii Sports"], answer:1, feedback:"Minecraft é o jogo mais vendido de todos os tempos."},
-    {question:"Qual empresa desenvolveu a série 'Final Fantasy'?", options:["Square Enix","Capcom","Bandai Namco","Sega"], answer:0, feedback:"Square Enix desenvolve a série Final Fantasy."},
-    {question:"Em 'The Legend of Zelda: Ocarina of Time', qual é o nome da princesa?", options:["Zelda","Link","Ganondorf","Impa"], answer:0, feedback:"A princesa se chama Zelda."},
-    {question:"Qual destes é um jogo de luta?", options:["Street Fighter","Portal","Stardew Valley","Civilization"], answer:0, feedback:"Street Fighter é um jogo de luta."}
-  ]
-};
+    <script>
+        // Simulação de uma API de IA
+        const aiQuizAPI = {
+            // Função que simula uma chamada à API de IA
+            generateQuestions: function(topic, count = 5) {
+                return new Promise((resolve) => {
+                    // Simula o tempo de resposta da IA
+                    setTimeout(() => {
+                        const questions = this.getQuestionsByTopic(topic, count);
+                        resolve(questions);
+                    }, 2000);
+                });
+            },
+            
+            // Banco de perguntas que simula perguntas geradas por IA
+            getQuestionsByTopic: function(topic, count) {
+                const allQuestions = {
+                    tecnologia: [
+                        {
+                            question: "Qual linguagem de programação foi criada por Guido van Rossum e é conhecida por sua sintaxe clara e legibilidade?",
+                            options: ["Python", "Java", "C++", "Ruby"],
+                            answer: 0,
+                            feedback: "Python foi criada por Guido van Rossum e lançada em 1991. É amplamente utilizada em ciência de dados, IA e desenvolvimento web."
+                        },
+                        {
+                            question: "O que significa a sigla 'API' no contexto de desenvolvimento de software?",
+                            options: ["Application Programming Interface", "Advanced Programming Instruction", "Automated Program Integration", "Application Process Integration"],
+                            answer: 0,
+                            feedback: "API significa Application Programming Interface (Interface de Programação de Aplicações). É um conjunto de definições e protocolos para construir e integrar software."
+                        },
+                        {
+                            question: "Qual empresa desenvolveu o sistema operacional Linux?",
+                            options: ["Microsoft", "Apple", "Linus Torvalds", "IBM"],
+                            answer: 2,
+                            feedback: "Linus Torvalds criou o Linux em 1991 enquanto era estudante na Universidade de Helsinki."
+                        },
+                        {
+                            question: "O que é 'machine learning'?",
+                            options: ["Um tipo de hardware para computadores", "Um subcampo da inteligência artificial", "Uma linguagem de programação", "Um sistema operacional"],
+                            answer: 1,
+                            feedback: "Machine Learning é um subcampo da inteligência artificial que se concentra no desenvolvimento de algoritmos que permitem aos computadores aprender e melhorar com a experiência."
+                        },
+                        {
+                            question: "Qual destes NÃO é um protocolo de internet?",
+                            options: ["HTTP", "FTP", "SMTP", "JPEG"],
+                            answer: 3,
+                            feedback: "JPEG é um formato de arquivo de imagem, não um protocolo de internet. HTTP, FTP e SMTP são protocolos de comunicação."
+                        }
+                    ],
+                    ciencia: [
+                        {
+                            question: "Qual é a partícula subatômica com carga positiva?",
+                            options: ["Elétron", "Nêutron", "Próton", "Fóton"],
+                            answer: 2,
+                            feedback: "O próton é uma partícula subatômica com carga positiva que fica no núcleo do átomo."
+                        },
+                        {
+                            question: "Qual planeta é conhecido como 'Planeta Vermelho'?",
+                            options: ["Vênus", "Marte", "Júpiter", "Saturno"],
+                            answer: 1,
+                            feedback: "Marte é frequentemente chamado de 'Planeta Vermelho' devido à sua aparência avermelhada, causada pelo óxido de ferro em sua superfície."
+                        },
+                        {
+                            question: "Qual é o elemento químico mais abundante na crosta terrestre?",
+                            options: ["Oxigênio", "Silício", "Alumínio", "Ferro"],
+                            answer: 0,
+                            feedback: "O oxigênio é o elemento mais abundante na crosta terrestre, representando cerca de 46% de sua massa."
+                        },
+                        {
+                            question: "O que a teoria da relatividade geral de Einstein descreve?",
+                            options: ["O comportamento de partículas subatômicas", "A gravidade como curvatura do espaço-tempo", "A velocidade da luz no vácuo", "A dualidade onda-partícula"],
+                            answer: 1,
+                            feedback: "A teoria da relatividade geral de Einstein descreve a gravidade não como uma força, mas como uma curvatura do espaço-tempo causada pela massa e energia."
+                        },
+                        {
+                            question: "Qual é a unidade básica da hereditariedade?",
+                            options: ["Cromossomo", "Gene", "DNA", "Proteína"],
+                            answer: 1,
+                            feedback: "O gene é a unidade básica da hereditariedade, contendo as informações que determinam as características hereditárias."
+                        }
+                    ],
+                    cultura: [
+                        {
+                            question: "Qual é o livro mais vendido de todos os tempos, depois da Bíblia?",
+                            options: ["Dom Quixote", "Um Conto de Duas Cidades", "O Pequeno Príncipe", "Harry Potter e a Pedra Filosofal"],
+                            answer: 0,
+                            feedback: "Dom Quixote, de Miguel de Cervantes, é considerado o livro mais vendido depois da Bíblia, com mais de 500 milhões de cópias vendidas."
+                        },
+                        {
+                            question: "Quem pintou 'A Noite Estrelada'?",
+                            options: ["Pablo Picasso", "Vincent van Gogh", "Claude Monet", "Salvador Dalí"],
+                            answer: 1,
+                            feedback: "'A Noite Estrelada' foi pintada por Vincent van Gogh em 1889 durante sua estadia em um asilo em Saint-Rémy-de-Provence."
+                        },
+                        {
+                            question: "Qual é o país com maior número de patrimônios mundiais da UNESCO?",
+                            options: ["Itália", "China", "Espanha", "França"],
+                            answer: 0,
+                            feedback: "A Itália tem o maior número de patrimônios mundiais da UNESCO, com mais de 50 sítios reconhecidos."
+                        },
+                        {
+                            question: "Quem escreveu a peça 'Romeu e Julieta'?",
+                            options: ["Charles Dickens", "William Shakespeare", "Jane Austen", "Fiódor Dostoiévski"],
+                            answer: 1,
+                            feedback: "William Shakespeare escreveu 'Romeu e Julieta' entre 1591 e 1595. É uma das suas tragédias mais famosas."
+                        },
+                        {
+                            question: "Qual é o idioma mais falado no mundo como língua nativa?",
+                            options: ["Inglês", "Espanhol", "Mandarim", "Hindi"],
+                            answer: 2,
+                            feedback: "O mandarim é o idioma mais falado no mundo como língua nativa, com mais de 900 milhões de falantes."
+                        }
+                    ],
+                    historia: [
+                        {
+                            question: "Em que ano começou a Primeira Guerra Mundial?",
+                            options: ["1912", "1914", "1916", "1918"],
+                            answer: 1,
+                            feedback: "A Primeira Guerra Mundial começou em 28 de julho de 1914, após o assassinato do arquiduque Franz Ferdinand da Áustria."
+                        },
+                        {
+                            question: "Quem foi o primeiro presidente dos Estados Unidos?",
+                            options: ["Thomas Jefferson", "George Washington", "John Adams", "Abraham Lincoln"],
+                            answer: 1,
+                            feedback: "George Washington foi o primeiro presidente dos Estados Unidos, servindo de 1789 a 1797."
+                        },
+                        {
+                            question: "Qual civilização antiga construiu as pirâmides de Gizé?",
+                            options: ["Romanos", "Gregos", "Egípcios", "Astecas"],
+                            answer: 2,
+                            feedback: "As pirâmides de Gizé foram construídas pelos antigos egípcios durante o período do Antigo Império, por volta de 2580-2560 a.C."
+                        },
+                        {
+                            question: "Quem descobriu o Brasil?",
+                            options: ["Cristóvão Colombo", "Pedro Álvares Cabral", "Fernão de Magalhães", "Vasco da Gama"],
+                            answer: 1,
+                            feedback: "Pedro Álvares Cabral chegou ao Brasil em 22 de abril de 1500, reivindicando a terra para Portugal."
+                        },
+                        {
+                            question: "Qual foi o último imperador do Brasil?",
+                            options: ["Dom Pedro I", "Dom Pedro II", "Dom João VI", "Dom Miguel I"],
+                            answer: 1,
+                            feedback: "Dom Pedro II foi o segundo e último imperador do Brasil, reinando de 1831 até a Proclamação da República em 1889."
+                        }
+                    ]
+                };
+                
+                // Retorna um subconjunto aleatório de perguntas
+                const questions = allQuestions[topic];
+                const shuffled = questions.sort(() => 0.5 - Math.random());
+                return shuffled.slice(0, count);
+            },
+            
+            // Simula análise de resultados por IA
+            analyzeResults: function(score, total) {
+                const percentage = (score / total) * 100;
+                
+                if (percentage >= 90) {
+                    return "Excelente desempenho! Suas respostas demonstram um conhecimento excepcional sobre o tema. A IA classifica você como especialista!";
+                } else if (percentage >= 70) {
+                    return "Bom trabalho! Você tem um conhecimento sólido sobre o assunto. A IA identifica que você está acima da média.";
+                } else if (percentage >= 50) {
+                    return "Resultado satisfatório. A IA sugere que você continue explorando o tema para aprofundar seu conhecimento.";
+                } else {
+                    return "Não desanime! A IA recomenda revisar o conteúdo e tentar novamente. O aprendizado é um processo contínuo.";
+                }
+            }
+        };
 
-let currentQuiz = [];
-let currentQuestion = 0;
-let score = 0;
+        // Variáveis do quiz
+        let currentQuiz = [];
+        let currentQuestion = 0;
+        let score = 0;
 
-const menuEl = document.getElementById("menu");
-const questionContainer = document.getElementById("question-container");
-const questionEl = document.getElementById("question");
-const optionsEl = document.getElementById("options");
-const feedbackEl = document.getElementById("feedback");
-const nextBtn = document.getElementById("next-btn");
-const resultContainer = document.getElementById("result-container");
-const scoreEl = document.getElementById("score");
-const scorePercentageEl = document.getElementById("score-percentage");
-const progressEl = document.getElementById("progress");
+        // Elementos do DOM
+        const menuEl = document.getElementById("menu");
+        const questionContainer = document.getElementById("question-container");
+        const questionEl = document.getElementById("question");
+        const optionsEl = document.getElementById("options");
+        const feedbackEl = document.getElementById("feedback");
+        const nextBtn = document.getElementById("next-btn");
+        const resultContainer = document.getElementById("result-container");
+        const scoreEl = document.getElementById("score");
+        const scorePercentageEl = document.getElementById("score-percentage");
+        const progressEl = document.getElementById("progress");
+        const loadingEl = document.getElementById("loading");
+        const aiFeedbackEl = document.getElementById("ai-feedback");
+        const themeToggle = document.getElementById("themeToggle");
 
-function startQuiz(topic) {
-  currentQuiz = quizzes[topic];
-  currentQuestion = 0;
-  score = 0;
-  menuEl.style.display = "none";
-  resultContainer.style.display = "none";
-  questionContainer.style.display = "block";
-  updateProgress();
-  loadQuestion();
-}
+        // Iniciar o quiz
+        async function startQuiz(topic) {
+            menuEl.style.display = "none";
+            questionContainer.style.display = "none";
+            resultContainer.style.display = "none";
+            loadingEl.style.display = "flex";
+            
+            // Simula a geração de perguntas pela IA
+            currentQuiz = await aiQuizAPI.generateQuestions(topic, 5);
+            
+            currentQuestion = 0;
+            score = 0;
+            
+            loadingEl.style.display = "none";
+            questionContainer.style.display = "block";
+            updateProgress();
+            loadQuestion();
+        }
 
-function loadQuestion() {
-  const q = currentQuiz[currentQuestion];
-  questionEl.textContent = q.question;
-  optionsEl.innerHTML = "";
-  feedbackEl.textContent = "";
-  feedbackEl.className = "feedback";
-  nextBtn.style.display = "none";
+        // Carregar pergunta
+        function loadQuestion() {
+            const q = currentQuiz[currentQuestion];
+            questionEl.textContent = q.question;
+            optionsEl.innerHTML = "";
+            feedbackEl.textContent = "";
+            feedbackEl.className = "feedback";
+            nextBtn.style.display = "none";
 
-  q.options.forEach((option, index) => {
-    const button = document.createElement("button");
-    button.textContent = option;
-    button.addEventListener("click", () => selectAnswer(index));
-    optionsEl.appendChild(button);
-  });
-}
+            q.options.forEach((option, index) => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.className = "option-btn";
+                button.addEventListener("click", () => selectAnswer(index));
+                optionsEl.appendChild(button);
+            });
+        }
 
-function selectAnswer(index) {
-  const q = currentQuiz[currentQuestion];
-  const buttons = optionsEl.querySelectorAll("button");
-  
-  // Desabilita todos os botões
-  buttons.forEach(btn => btn.disabled = true);
-  
-  // Marca a resposta correta e a selecionada
-  buttons[q.answer].classList.add("correct");
-  
-  if (index !== q.answer) {
-    buttons[index].classList.add("incorrect");
-    feedbackEl.textContent = "❌ Errado! " + q.feedback;
-    feedbackEl.className = "feedback incorrect";
-  } else {
-    score++;
-    feedbackEl.textContent = "✔️ Correto! " + q.feedback;
-    feedbackEl.className = "feedback correct";
-  }
-  
-  nextBtn.style.display = "block";
-}
+        // Selecionar resposta
+        function selectAnswer(index) {
+            const q = currentQuiz[currentQuestion];
+            const buttons = optionsEl.querySelectorAll("button");
+            
+            // Desabilita todos os botões
+            buttons.forEach(btn => btn.disabled = true);
+            
+            // Marca a resposta correta e a selecionada
+            buttons[q.answer].classList.add("correct");
+            
+            if (index !== q.answer) {
+                buttons[index].classList.add("incorrect");
+                feedbackEl.textContent = "❌ " + q.feedback;
+                feedbackEl.className = "feedback incorrect";
+            } else {
+                score++;
+                feedbackEl.textContent = "✅ " + q.feedback;
+                feedbackEl.className = "feedback correct";
+            }
+            
+            nextBtn.style.display = "block";
+        }
 
-nextBtn.addEventListener("click", () => {
-  currentQuestion++;
-  if (currentQuestion < currentQuiz.length) {
-    updateProgress();
-    loadQuestion();
-  } else {
-    showResult();
-  }
-});
+        // Próxima pergunta
+        nextBtn.addEventListener("click", () => {
+            currentQuestion++;
+            if (currentQuestion < currentQuiz.length) {
+                updateProgress();
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        });
 
-function updateProgress() {
-  const progress = ((currentQuestion) / currentQuiz.length) * 100;
-  progressEl.style.width = `${progress}%`;
-}
+        // Atualizar barra de progresso
+        function updateProgress() {
+            const progress = ((currentQuestion) / currentQuiz.length) * 100;
+            progressEl.style.width = `${progress}%`;
+        }
 
-function showResult() {
-  questionContainer.style.display = "none";
-  resultContainer.style.display = "block";
-  const percentage = Math.round((score / currentQuiz.length) * 100);
-  
-  scoreEl.textContent = `Você acertou ${score} de ${currentQuiz.length} perguntas.`;
-  scorePercentageEl.textContent = `${percentage}%`;
-  
-  // Adiciona uma mensagem personalizada baseada na pontuação
-  let message = "";
-  if (percentage >= 90) message = "Excelente! Você é um expert no assunto!";
-  else if (percentage >= 70) message = "Muito bom! Você conhece bem o tema.";
-  else if (percentage >= 50) message = "Bom trabalho! Continue aprendendo.";
-  else message = "Não desanime! Tente novamente para melhorar.";
-  
-  scoreEl.textContent += ` ${message}`;
-}
+        // Mostrar resultados
+        function showResult() {
+            questionContainer.style.display = "none";
+            resultContainer.style.display = "block";
+            const percentage = Math.round((score / currentQuiz.length) * 100);
+            
+            scoreEl.textContent = `Você acertou ${score} de ${currentQuiz.length} perguntas.`;
+            scorePercentageEl.textContent = `${percentage}%`;
+            
+            // Adiciona feedback da IA
+            aiFeedbackEl.textContent = aiQuizAPI.analyzeResults(score, currentQuiz.length);
+        }
 
-function showMenu() {
-  menuEl.style.display = "block";
-  resultContainer.style.display = "none";
-  progressEl.style.width = "0%";
-}
-</script>
+        // Voltar ao menu
+        function showMenu() {
+            menuEl.style.display = "block";
+            resultContainer.style.display = "none";
+            progressEl.style.width = "0%";
+        }
 
+        // Alternar tema claro/escuro
+        themeToggle.addEventListener("click", () => {
+            const currentTheme = document.documentElement.getAttribute("data-theme");
+            const newTheme = currentTheme === "dark" ? "light" : "dark";
+            document.documentElement.setAttribute("data-theme", newTheme);
+            
+            const icon = themeToggle.querySelector("i");
+            if (newTheme === "dark") {
+                icon.classList.remove("fa-moon");
+                icon.classList.add("fa-sun");
+            } else {
+                icon.classList.remove("fa-sun");
+                icon.classList.add("fa-moon");
+            }
+        });
+    </script>
 </body>
 </html>

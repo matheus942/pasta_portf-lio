@@ -1,0 +1,2 @@
+# Ignore local Firebase config (copy from config.example.js)
+/pasta_portfólio/services/firebase/config.js

@@ -741,9 +741,16 @@
         </div>
     </main>
 
+    <!-- Firebase SDKs (compat) and DB service -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="../services/firebase/config.js"></script>
+    <script src="../services/firebase/index.js"></script>
+    <script src="../services/firebase/crud.js"></script>
+
     <script>
         // Dados dos produtos com imagens funcionais
-        const products = [
+        let products = [
             {
                 id: 1,
                 name: "Smartphone Samsung Galaxy S23",
@@ -1198,13 +1205,38 @@
             renderProducts(filteredProducts);
         }
 
+        // Carregar produtos do Firebase se disponível
+        async function initProducts() {
+            if (window.DB && window.DB.ready) {
+                try {
+                    const docs = await window.DB.list('produtos');
+                    if (docs && docs.length) {
+                        products = docs.map(d => ({
+                            id: d.id || Date.now(),
+                            name: d.nome || d.name,
+                            category: d.categoria || d.category || '',
+                            price: Number(d.preco ?? d.price ?? 0),
+                            image: d.imagem || d.image || '',
+                            description: d.descricao || d.description || '',
+                            rating: Number(d.rating ?? 0),
+                            reviews: Number(d.reviews ?? 0),
+                            discount: Number(d.desconto ?? d.discount ?? 0)
+                        }));
+                    }
+                } catch (e) {
+                    console.warn('[Mini_Loja] Falha ao carregar produtos do Firebase:', e);
+                }
+            }
+            renderProducts(products);
+        }
+
         // Event Listeners
         document.addEventListener('DOMContentLoaded', function() {
             // Pré-carregar imagens
             preloadImages();
             
-            // Inicializar produtos
-            renderProducts(products);
+            // Inicializar produtos (Firebase ou fallback)
+            initProducts();
             
             // Menu de navegação
             const menuItems = document.querySelectorAll('nav ul li a');
@@ -1229,6 +1261,130 @@
             priceFilter.addEventListener('change', filterAndSortProducts);
             sortFilter.addEventListener('change', filterAndSortProducts);
         });
+    </script>
+
+    <!-- Admin CRUD JS (separado para manter organização) -->
+    <script>
+        (function(){
+            const form = document.getElementById('productForm');
+            const adminStatus = document.getElementById('adminStatus');
+            const listEl = document.getElementById('adminProducts');
+            if (!form || !adminStatus || !listEl) return;
+
+            const prodId = document.getElementById('prodId');
+            const prodNome = document.getElementById('prodNome');
+            const prodCategoria = document.getElementById('prodCategoria');
+            const prodPreco = document.getElementById('prodPreco');
+            const prodImagem = document.getElementById('prodImagem');
+            const prodDescricao = document.getElementById('prodDescricao');
+            const prodRating = document.getElementById('prodRating');
+            const prodReviews = document.getElementById('prodReviews');
+            const prodDesconto = document.getElementById('prodDesconto');
+            const btnLimpar = document.getElementById('btnLimpar');
+
+            function clearForm(){
+                prodId.value = '';
+                prodNome.value = '';
+                prodCategoria.value = '';
+                prodPreco.value = '';
+                prodImagem.value = '';
+                prodDescricao.value = '';
+                prodRating.value = '';
+                prodReviews.value = '';
+                prodDesconto.value = '';
+            }
+
+            async function loadAdminProducts(){
+                if (!(window.DB && window.DB.ready)) {
+                    adminStatus.textContent = 'Firebase não configurado. Use config.example.js para criar config.js';
+                    listEl.innerHTML = '';
+                    return;
+                }
+                adminStatus.textContent = 'Conectado ao Firebase.';
+                const docs = await window.DB.list('produtos');
+                listEl.innerHTML = docs.length ? '' : '<div style="color:#666;">Nenhum produto ainda.</div>';
+                docs.forEach(d => {
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
+                    card.style.marginBottom = '8px';
+                    card.innerHTML = `
+                      <div class="product-info" style="display:flex; align-items:center; gap:12px;">
+                        <img src="${d.imagem || d.image || ''}" alt="${d.nome || d.name || ''}" style="width:64px; height:64px; object-fit:cover; border-radius:6px; background:#f8f9fa;" />
+                        <div style="flex:1;">
+                          <div style="font-weight:600;">${d.nome || d.name}</div>
+                          <div style="font-size:0.85rem; color:#666;">R$ ${(Number(d.preco ?? d.price ?? 0)).toFixed(2)} • ${d.categoria || d.category || ''}</div>
+                        </div>
+                        <button class="btn btn-outline" data-action="edit" data-id="${d.id}"><i class="fas fa-edit"></i> Editar</button>
+                        <button class="btn" style="background:#e74c3c; color:#fff;" data-action="del" data-id="${d.id}"><i class="fas fa-trash"></i> Excluir</button>
+                      </div>`;
+                    listEl.appendChild(card);
+                });
+
+                listEl.querySelectorAll('button[data-action="edit"]').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        const id = btn.getAttribute('data-id');
+                        const d = await window.DB.get('produtos', id);
+                        if (!d) return;
+                        prodId.value = d.id;
+                        prodNome.value = d.nome || d.name || '';
+                        prodCategoria.value = d.categoria || d.category || '';
+                        prodPreco.value = Number(d.preco ?? d.price ?? 0);
+                        prodImagem.value = d.imagem || d.image || '';
+                        prodDescricao.value = d.descricao || d.description || '';
+                        prodRating.value = Number(d.rating ?? 0);
+                        prodReviews.value = Number(d.reviews ?? 0);
+                        prodDesconto.value = Number(d.desconto ?? d.discount ?? 0);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    });
+                });
+                listEl.querySelectorAll('button[data-action="del"]').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        const id = btn.getAttribute('data-id');
+                        if (confirm('Excluir este produto?')){
+                            await window.DB.remove('produtos', id);
+                            await initProducts();
+                            await loadAdminProducts();
+                            showNotification('Produto excluído.', 'success');
+                        }
+                    });
+                });
+            }
+
+            if (window.DB && window.DB.ready) loadAdminProducts();
+            setTimeout(() => { if (window.DB && window.DB.ready) loadAdminProducts(); }, 1000);
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!(window.DB && window.DB.ready)) return alert('Firebase não configurado.');
+                const data = {
+                    nome: prodNome.value,
+                    categoria: prodCategoria.value,
+                    preco: Number(prodPreco.value || 0),
+                    imagem: prodImagem.value,
+                    descricao: prodDescricao.value,
+                    rating: Number(prodRating.value || 0),
+                    reviews: Number(prodReviews.value || 0),
+                    desconto: Number(prodDesconto.value || 0)
+                };
+                try {
+                    if (prodId.value) {
+                        await window.DB.update('produtos', prodId.value, data);
+                        showNotification('Produto atualizado com sucesso!', 'success');
+                    } else {
+                        await window.DB.create('produtos', data);
+                        showNotification('Produto criado com sucesso!', 'success');
+                    }
+                    clearForm();
+                    await initProducts();
+                    await loadAdminProducts();
+                } catch (e) {
+                    console.error(e);
+                    alert('Erro ao salvar produto. Verifique o console.');
+                }
+            });
+
+            btnLimpar.addEventListener('click', clearForm);
+        })();
     </script>
 </body>
 </html>

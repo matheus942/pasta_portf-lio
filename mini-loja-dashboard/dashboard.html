@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="./assets/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container">
+        <a class="logo" href="./index.html">Dashboard</a>
+        <nav class="nav">
+          <a href="./store.html" class="btn">Ir para a Loja</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <h2>Métricas</h2>
+      <section class="grid three" id="kpis">
+        <div class="card"><div class="kpi-label">Receita Total</div><div id="kpiRevenue" class="kpi-value">R$ 0,00</div></div>
+        <div class="card"><div class="kpi-label">Pedidos</div><div id="kpiOrders" class="kpi-value">0</div></div>
+        <div class="card"><div class="kpi-label">Ticket Médio</div><div id="kpiAOV" class="kpi-value">R$ 0,00</div></div>
+      </section>
+
+      <section class="card">
+        <div class="card-header">
+          <h3>Pedidos Recentes</h3>
+        </div>
+        <div id="emptyState" class="muted hidden">Nenhum pedido foi realizado ainda. Faça um checkout na Loja para ver dados aqui.</div>
+        <table id="ordersTable" class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Data</th>
+              <th>Itens</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <small>Dados carregados do localStorage</small>
+      </div>
+    </footer>
+
+    <script src="./assets/app.js"></script>
+    <script src="./assets/dashboard.js"></script>
+  </body>
+</html>
