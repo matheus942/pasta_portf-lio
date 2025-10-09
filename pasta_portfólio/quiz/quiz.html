@@ -469,7 +469,7 @@
         // Simulação de uma API de IA
         const aiQuizAPI = {
             // Função que simula uma chamada à API de IA
-            generateQuestions: function(topic, count = 5) {
+            generateQuestions: function(topic, count = 10) {
                 return new Promise((resolve) => {
                     // Simula o tempo de resposta da IA
                     setTimeout(() => {
@@ -512,6 +512,54 @@
                             options: ["HTTP", "FTP", "SMTP", "JPEG"],
                             answer: 3,
                             feedback: "JPEG é um formato de arquivo de imagem, não um protocolo de internet. HTTP, FTP e SMTP são protocolos de comunicação."
+                        },
+                        {
+                            question: "Qual foi o primeiro computador pessoal amplamente bem-sucedido?",
+                            options: ["Apple II", "IBM PC", "Commodore 64", "Altair 8800"],
+                            answer: 0,
+                            feedback: "O Apple II, lançado em 1977, foi o primeiro computador pessoal amplamente bem-sucedido e popularizou o conceito de computação doméstica."
+                        },
+                        {
+                            question: "O que significa a sigla 'HTML'?",
+                            options: ["HyperText Markup Language", "HighTech Modern Language", "HyperTransfer Markup Language", "HighText Machine Language"],
+                            answer: 0,
+                            feedback: "HTML significa HyperText Markup Language (Linguagem de Marcação de Hipertexto), a linguagem padrão para criar páginas web."
+                        },
+                        {
+                            question: "Qual destas redes sociais foi a primeira a ser criada?",
+                            options: ["Facebook", "MySpace", "SixDegrees", "Twitter"],
+                            answer: 2,
+                            feedback: "SixDegrees, lançada em 1997, é considerada a primeira rede social moderna, permitindo que usuários criassem perfis e listas de amigos."
+                        },
+                        {
+                            question: "O que é um 'firewall' em segurança de rede?",
+                            options: ["Um programa antivírus", "Um sistema de prevenção de intrusões", "Uma barreira entre redes confiáveis e não confiáveis", "Um protocolo de criptografia"],
+                            answer: 2,
+                            feedback: "Um firewall é um sistema de segurança de rede que monitora e controla o tráfego de rede com base em regras de segurança predefinidas, atuando como uma barreira entre redes confiáveis e não confiáveis."
+                        },
+                        {
+                            question: "Qual destas NÃO é uma linguagem de programação?",
+                            options: ["Python", "Java", "HTML", "C#"],
+                            answer: 2,
+                            feedback: "HTML não é uma linguagem de programação, mas sim uma linguagem de marcação usada para estruturar conteúdo na web."
+                        },
+                        {
+                            question: "Qual tecnologia é usada para armazenar dados de forma descentralizada e segura, como em criptomoedas?",
+                            options: ["Blockchain", "Cloud Computing", "Big Data", "Quantum Computing"],
+                            answer: 0,
+                            feedback: "Blockchain é uma tecnologia de registro distribuído que garante segurança e transparência, amplamente usada em criptomoedas como Bitcoin."
+                        },
+                        {
+                            question: "Quem é considerado o 'pai da computação' por desenvolver a máquina analítica?",
+                            options: ["Alan Turing", "Charles Babbage", "Bill Gates", "Tim Berners-Lee"],
+                            answer: 1,
+                            feedback: "Charles Babbage projetou a Máquina Analítica no século XIX, considerada um precursor dos computadores modernos."
+                        },
+                        {
+                            question: "O que é um 'byte'?",
+                            options: ["Um tipo de software", "Uma unidade de armazenamento digital", "Um protocolo de rede", "Um componente de hardware"],
+                            answer: 1,
+                            feedback: "Um byte é uma unidade de armazenamento digital que consiste em 8 bits, capaz de representar 256 valores diferentes."
                         }
                     ],
                     ciencia: [
@@ -544,6 +592,54 @@
                             options: ["Cromossomo", "Gene", "DNA", "Proteína"],
                             answer: 1,
                             feedback: "O gene é a unidade básica da hereditariedade, contendo as informações que determinam as características hereditárias."
+                        },
+                        {
+                            question: "Qual é o maior órgão do corpo humano?",
+                            options: ["Fígado", "Cérebro", "Pele", "Intestino"],
+                            answer: 2,
+                            feedback: "A pele é o maior órgão do corpo humano, representando cerca de 15% do peso corporal total."
+                        },
+                        {
+                            question: "Qual destes gases é o mais abundante na atmosfera terrestre?",
+                            options: ["Oxigênio", "Dióxido de Carbono", "Nitrogênio", "Argônio"],
+                            answer: 2,
+                            feedback: "O nitrogênio é o gás mais abundante na atmosfera terrestre, representando cerca de 78% do seu volume."
+                        },
+                        {
+                            question: "O que mede um sismógrafo?",
+                            options: ["A velocidade do vento", "A intensidade de terremotos", "A umidade do ar", "A pressão atmosférica"],
+                            answer: 1,
+                            feedback: "Um sismógrafo é um instrumento que mede e registra as vibrações do solo durante terremotos."
+                        },
+                        {
+                            question: "Qual é a velocidade da luz no vácuo?",
+                            options: ["300.000 km/s", "150.000 km/s", "500.000 km/s", "1.000.000 km/s"],
+                            answer: 0,
+                            feedback: "A velocidade da luz no vácuo é de aproximadamente 300.000 quilômetros por segundo."
+                        },
+                        {
+                            question: "Qual destes animais é um mamífero?",
+                            options: ["Tubarão", "Golfinho", "Lagarto", "Pinguim"],
+                            answer: 1,
+                            feedback: "O golfinho é um mamífero marinho, enquanto tubarões são peixes, lagartos são répteis e pinguins são aves."
+                        },
+                        {
+                            question: "Qual é o nome do processo pelo qual as plantas convertem luz solar em energia?",
+                            options: ["Respiração celular", "Fotossíntese", "Fermentação", "Transpiração"],
+                            answer: 1,
+                            feedback: "A fotossíntese é o processo pelo qual as plantas utilizam a luz solar para converter dióxido de carbono e água em glicose e oxigênio."
+                        },
+                        {
+                            question: "Qual é o maior planeta do sistema solar?",
+                            options: ["Terra", "Júpiter", "Saturno", "Netuno"],
+                            answer: 1,
+                            feedback: "Júpiter é o maior planeta do sistema solar, com um diâmetro de aproximadamente 139.820 km."
+                        },
+                        {
+                            question: "Qual é a fórmula química da água?",
+                            options: ["H2O", "CO2", "O2", "H2SO4"],
+                            answer: 0,
+                            feedback: "A fórmula química da água é H2O, representando dois átomos de hidrogênio ligados a um átomo de oxigênio."
                         }
                     ],
                     cultura: [
@@ -576,6 +672,54 @@
                             options: ["Inglês", "Espanhol", "Mandarim", "Hindi"],
                             answer: 2,
                             feedback: "O mandarim é o idioma mais falado no mundo como língua nativa, com mais de 900 milhões de falantes."
+                        },
+                        {
+                            question: "Em que país nasceu o futebolista Lionel Messi?",
+                            options: ["Brasil", "Argentina", "Espanha", "Portugal"],
+                            answer: 1,
+                            feedback: "Lionel Messi nasceu em Rosário, Argentina, em 24 de junho de 1987."
+                        },
+                        {
+                            question: "Qual destes filmes ganhou o Oscar de Melhor Filme em 2020?",
+                            options: ["Parasita", "1917", "Coringa", "Era Uma Vez em... Hollywood"],
+                            answer: 0,
+                            feedback: "'Parasita', dirigido por Bong Joon-ho, ganhou o Oscar de Melhor Filme em 2020, sendo o primeiro filme em língua não inglesa a vencer essa categoria."
+                        },
+                        {
+                            question: "Qual é a capital da Austrália?",
+                            options: ["Sydney", "Melbourne", "Canberra", "Perth"],
+                            answer: 2,
+                            feedback: "Canberra é a capital da Austrália, escolhida como compromisso entre Sydney e Melbourne, as duas maiores cidades do país."
+                        },
+                        {
+                            question: "Quem compôs a Nona Sinfonia?",
+                            options: ["Mozart", "Bach", "Beethoven", "Chopin"],
+                            answer: 2,
+                            feedback: "Ludwig van Beethoven compôs a Nona Sinfonia, que inclui o famoso 'Hino à Alegria'."
+                        },
+                        {
+                            question: "Qual destes esportes NÃO faz parte das Olimpíadas?",
+                            options: ["Golfe", "Rugby", "Xadrez", "Surfe"],
+                            answer: 2,
+                            feedback: "O xadrez não é um esporte olímpico, embora existam competições internacionais organizadas pela FIDE (Federação Internacional de Xadrez)."
+                        },
+                        {
+                            question: "Qual é a dança tradicional do Brasil associada ao carnaval?",
+                            options: ["Tango", "Samba", "Flamenco", "Salsa"],
+                            answer: 1,
+                            feedback: "O samba é a dança tradicional brasileira mais associada ao carnaval, especialmente no Rio de Janeiro."
+                        },
+                        {
+                            question: "Qual é o nome do famoso museu de arte localizado em Paris?",
+                            options: ["Metropolitan Museum", "Louvre", "Prado", "Uffizi"],
+                            answer: 1,
+                            feedback: "O Louvre, localizado em Paris, é um dos museus de arte mais famosos do mundo, abrigando obras como a Mona Lisa."
+                        },
+                        {
+                            question: "Qual é o prato típico japonês feito de peixe cru e arroz?",
+                            options: ["Sushi", "Ramen", "Tempura", "Udon"],
+                            answer: 0,
+                            feedback: "Sushi é um prato japonês que geralmente consiste em peixe cru e arroz temperado, frequentemente acompanhado de algas ou outros ingredientes."
                         }
                     ],
                     historia: [
@@ -608,6 +752,54 @@
                             options: ["Dom Pedro I", "Dom Pedro II", "Dom João VI", "Dom Miguel I"],
                             answer: 1,
                             feedback: "Dom Pedro II foi o segundo e último imperador do Brasil, reinando de 1831 até a Proclamação da República em 1889."
+                        },
+                        {
+                            question: "Em que ano o Muro de Berlim foi derrubado?",
+                            options: ["1987", "1989", "1991", "1993"],
+                            answer: 1,
+                            feedback: "O Muro de Berlim foi derrubado em 9 de novembro de 1989, marcando simbolicamente o fim da Guerra Fria."
+                        },
+                        {
+                            question: "Quem foi o líder da Revolução Russa de 1917?",
+                            options: ["Joseph Stalin", "Vladimir Lenin", "Leon Trotsky", "Karl Marx"],
+                            answer: 1,
+                            feedback: "Vladimir Lenin foi o principal líder da Revolução Russa de 1917, que estabeleceu o primeiro estado comunista do mundo."
+                        },
+                        {
+                            question: "Qual império era governado por Júlio César?",
+                            options: ["Império Romano", "Império Bizantino", "Império Macedônico", "Império Otomano"],
+                            answer: 0,
+                            feedback: "Júlio César foi um importante líder militar e político da República Romana, cujas ações contribuíram para a transição para o Império Romano."
+                        },
+                        {
+                            question: "Quem foi o primeiro homem a pisar na Lua?",
+                            options: ["Buzz Aldrin", "Neil Armstrong", "Yuri Gagarin", "John Glenn"],
+                            answer: 1,
+                            feedback: "Neil Armstrong foi o primeiro homem a pisar na Lua em 20 de julho de 1969, durante a missão Apollo 11."
+                        },
+                        {
+                            question: "Qual foi o principal tratado que encerrou a Primeira Guerra Mundial?",
+                            options: ["Tratado de Versalhes", "Tratado de Tordesilhas", "Tratado de Paris", "Tratado de Brest-Litovsk"],
+                            answer: 0,
+                            feedback: "O Tratado de Versalhes, assinado em 1919, encerrou oficialmente a Primeira Guerra Mundial e impôs duras condições à Alemanha."
+                        },
+                        {
+                            question: "Qual evento marcou o início da Segunda Guerra Mundial?",
+                            options: ["Invasão da Polônia", "Ataque a Pearl Harbor", "Batalha de Stalingrado", "Queda da Bastilha"],
+                            answer: 0,
+                            feedback: "A Segunda Guerra Mundial começou em 1º de setembro de 1939, com a invasão da Polônia pela Alemanha nazista."
+                        },
+                        {
+                            question: "Quem foi a rainha do Egito conhecida por suas alianças com líderes romanos?",
+                            options: ["Nefertiti", "Cleópatra", "Hatshepsut", "Nefertari"],
+                            answer: 1,
+                            feedback: "Cleópatra VII foi a última rainha do Egito, conhecida por suas alianças políticas e pessoais com Júlio César e Marco Antônio."
+                        },
+                        {
+                            question: "Qual foi a capital do Império Inca?",
+                            options: ["Machu Picchu", "Cusco", "Tenochtitlán", "Chichen Itzá"],
+                            answer: 1,
+                            feedback: "Cusco foi a capital do Império Inca, considerada o centro político e religioso da civilização."
                         }
                     ]
                 };
@@ -662,7 +854,7 @@
             loadingEl.style.display = "flex";
             
             // Simula a geração de perguntas pela IA
-            currentQuiz = await aiQuizAPI.generateQuestions(topic, 5);
+            currentQuiz = await aiQuizAPI.generateQuestions(topic, 10);
             
             currentQuestion = 0;
             score = 0;
